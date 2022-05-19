@@ -1,0 +1,168 @@
+function checkDay() {
+
+    try {
+
+        var annotations = hermes_log['candidate_annotations']
+        log('annotations : ')
+        log(JSON.stringify(annotations, null, ' '))
+
+        if (!isEmpty(annotations)) {
+
+            if (annotations.length >= 1 && annotations[0].hasOwnProperty('begin_pos') === true) {
+
+                list_annotated = []
+                for (var i = 0; i < annotations.length; i++) {
+
+                    var name = annotations[i]['entity_name']
+
+                    if (name == '요일') {
+                        list_annotated.push(annotations[i]['value'])
+                    } else if (name == 'datetime') {
+                        list_annotated.push(annotations[i]['value'])
+                    } else if (name == 'duration') {
+                        list_annotated.push(annotations[i]['value'])
+                    }
+                }
+
+                var list_days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일', '매일']
+
+                var list_days_said = []
+                log('list_annotated : ')
+                log(JSON.stringify(list_annotated, null, ' '))
+
+                for (var j = 0; j < list_annotated.length; j++) {
+                    if (list_days.indexOf(list_annotated[j]) != -1) {
+                        list_days_said.push(list_annotated[j])
+                    }
+                    else if (list_annotated[j].indexOf('W') != -1
+                        && list_annotated[j].length == 10) {
+                        if (list_annotated[j][9] == '1') {
+                            list_days_said.push('월요일')
+                        }
+                        if (list_annotated[j][9] == '2') {
+                            list_days_said.push('화요일')
+                        }
+                        if (list_annotated[j][9] == '3') {
+                            list_days_said.push('수요일')
+                        }
+                        if (list_annotated[j][9] == '4') {
+                            list_days_said.push('목요일')
+                        }
+                        if (list_annotated[j][9] == '5') {
+                            list_days_said.push('금요일')
+                        }
+                        if (list_annotated[j][9] == '6') {
+                            list_days_said.push('토요일')
+                        }
+                        if (list_annotated[j][9] == '7') {
+                            list_days_said.push('일요일')
+                        }
+                    }
+                    else if ((list_annotated[j].indexOf('W') != -1) && (list_annotated[j].length == 11)) {
+                        if (list_annotated[j][10] == 'D') {
+                            list_days_said.push('월요일')
+                            list_days_said.push('화요일')
+                            list_days_said.push('수요일')
+                            list_days_said.push('목요일')
+                            list_days_said.push('금요일')
+                        }
+                        if (list_annotated[j][10] == 'E') {
+                            list_days_said.push('토요일')
+                            list_days_said.push('일요일')
+                        }
+                    } else if (list_annotated[j].indexOf('P1W') != -1) {
+                        list_days_said.push('월요일')
+                        list_days_said.push('화요일')
+                        list_days_said.push('수요일')
+                        list_days_said.push('목요일')
+                        list_days_said.push('금요일')
+                        list_days_said.push('토요일')
+                        list_days_said.push('일요일')
+                    }
+                }
+
+                if (list_days_said.indexOf('매일') != -1) {
+                    list_days_said = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
+                }
+
+                var day_map = {
+                    '월요일': 1,
+                    '화요일': 2,
+                    '수요일': 3,
+                    '목요일': 4,
+                    '금요일': 5,
+                    '토요일': 6,
+                    '일요일': 7
+                }
+
+                var list_days_final = []
+                if ((user_says.indexOf('부터') != -1) || (user_says.indexOf('~') != -1)) {
+                    log('user_says : ' + user_says)
+
+                    list_num = []
+                    for (var k = 0; k < list_days_said.length; k++) {
+                        var num = day_map[list_days_said[k]]
+                        list_num.push(num)
+                    }
+                    var min = Math.min.apply(null, list_num) - 1
+                    var max = Math.max.apply(null, list_num) - 1
+
+                    var list_converted = []
+                    for (var l = min; l <= max; l++) {
+                        list_converted.push(list_days[l])
+                    }
+                    list_days_final = removeDuplicate(list_converted)
+
+                } else {
+                    list_days_final = removeDuplicate(list_days_said)
+                }
+
+                if (list_days_final.length != 0) {
+                    log('list_days : ' + list_days_final)
+                    setGlobal('list_days', toSayDays(list_days_final))
+                    return 'true'
+                } else {
+                    log('checkDay function result : no day in user_says')
+                    return 'false'
+                }
+
+            } else {
+                log('checkDay function result : no annotations')
+                return 'false'
+            }
+
+        } else {
+            log('checkDay function result : no annotations')
+            return 'false'
+        }
+
+    } catch (e) {
+
+        log('checkDay function try catch error : ')
+        log(e)
+        return 'false'
+    }
+}
+
+
+function removeDuplicate(list_data) {
+
+    var list_deleted = []
+    for (var i = 0; i < list_data.length; i++) {
+        if (list_deleted.indexOf(list_data[i]) == -1) {
+            list_deleted.push(list_data[i])
+        }
+    }
+
+    return list_deleted
+}
+
+function toSayDays(list_days) {
+    var msg = ''
+    for (var i = 0; i < list_days.length; i++) {
+        msg += list_days[i] + ', '
+    }
+
+    var len = msg.length
+    return msg.substring(0, len - 2)
+}

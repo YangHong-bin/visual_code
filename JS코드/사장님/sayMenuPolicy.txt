@@ -1,0 +1,93 @@
+function sayMenuPolicy(this_menu) {
+
+    var menu_policy = getGlobal('menu_policy')
+
+    var task = getGlobal('task')
+
+    if (task == '메뉴 추가') {
+        task = '추가'
+    } else if (task == '메뉴 삭제') {
+        task = '삭제'
+    } else {
+        task = '변경'
+    }
+
+    var message = '현재까지 등록된 ' + task + '할 메뉴 리스트입니다.\n--------------------\n'
+
+    for (var i = 0; i < menu_policy.length; i++) {
+        const splited = menu_policy[i].split('_~,')
+        if (i > 0) {
+            message += '\n\n'
+        }
+        message += (i + 1) + '번.'
+
+        if (task === '추가') {
+          message += '\n카테고리 : ' + splited[0]
+          message += '\n메뉴명 : ' + splited[1]
+          message += '\n가격 : ' + splited[2]
+        } else if (task === '삭제') {
+          message += '\n카테고리 : ' + splited[0]
+          message += '\n메뉴명 : ' + splited[1]
+        } else { // 변경
+          //const category_menu = splited[0].split('/')
+          //message += '\n카테고리 : ' + category_menu[0]
+          //message += '\n메뉴명 : ' + category_menu[1]
+          //var etc_splited = splited[1].split('/')
+          //message += '\n' + etc_splited[0]
+          //message += '\n' + etc_splited[1].trim()
+          message += '\n카테고리 : ' + splited[0]
+          message += '\n메뉴명 : ' + splited[1]
+          message += '\n변경 요청사항 : ' + splited[2].trim()
+        }
+        // var splited = splited = menu_policy[i].split(',')
+        // var foods_categorymenu = menu_policy[0].split(',')
+        // var foods_etc = menu_policy[1].split(',')
+
+        // for (var i = 0; i < foods_categorymenu.length; i++) {
+            
+        //     var splited2 = splited2 = foods_categorymenu[0].split('/')
+        //     var foods_category = ''
+        //     var foods_menu = ''
+            
+        //     if (i > 0) {
+        //         message += '\n\n'
+        //     }
+        //     message += (i + 1) + '번.'
+
+        //     if (task.indexOf('변경') == -1) {
+
+        //         foods_category = splited2[0]
+        //         foods_menu = splited2[1]
+
+        //         message += '\n카테고리 : ' + foods_category
+        //         message += '\n메뉴명 : ' + foods_menu
+
+        //         if (task == '메뉴 추가') {
+        //             var foods_price = splited2[2]
+        //             message += '\n가격 : ' + foods_price
+        //         }
+
+        //     } else {
+
+        //         foods_category = splited2[0]
+        //         foods_menu = splited2[1]
+        //         foods_etc = splited2[2]
+
+        //         message += '\n카테고리 : ' + foods_category
+        //         message += '\n메뉴명 : ' + foods_menu
+        //         var etc_splited = foods_etc.split('/')
+        //         message += '\n' + etc_splited[0]
+        //         message += '\n' + etc_splited[1].trim()
+
+        //     }
+        // }    
+
+    }
+
+    message += '\n--------------------\n\n'
+    message += this_menu + '외에 다른 메뉴를 더 ' + task + '하시겠어요?'
+    message += '\n<아니오>를 선택하시면 현재까지 등록된 리스트로 메뉴 ' + task + ' 요청을 접수합니다.'
+
+    return createTextFormat([message])
+
+}

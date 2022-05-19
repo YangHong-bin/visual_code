@@ -1,0 +1,49 @@
+function getCustomerInfo(phone_number) {
+
+    log('getCustomerInfo function is activated')
+
+    try {
+      
+        phone_number = phone_number.replace('-', '').replace('-', '')
+
+        var result = CustomerInfo(phone_number)
+        log('CustomerInfor result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('user') === true) {
+
+                var phone_number = result['user']['phone']
+                var email = result['user']['email']
+                if (phone_number != "") {
+                    setGlobal('phone_number', phone_number)
+                }
+                if (email != "") {
+                    setGlobal('email', email)
+                }
+
+                return 'true'
+
+            } else {
+
+                log('getCustomerInfo function result : no Customer')
+                return 'no_customer'
+            }
+
+        } else {
+            log('getCustomerInfo function result : no Customer')
+            return 'false'
+        }
+
+
+    } catch (e) {
+
+        log('getCustomerInfo try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+
+}

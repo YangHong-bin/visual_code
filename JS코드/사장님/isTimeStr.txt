@@ -1,0 +1,14 @@
+function isTimeStr() {
+  log('is time str |' + user_says)
+  const userStr = user_says.trim()
+  if (userStr === '오전10시') {
+    return '10:00:00'
+  } else if (userStr === '오후1시') { 
+    return '13:00:00'
+  } else if (userStr == '오후4시') {
+    return '16:00:00'
+  } else if (userStr == '오후7시') {
+    return '19:00:00'
+  }
+  return 'false'
+}

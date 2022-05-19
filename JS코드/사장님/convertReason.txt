@@ -1,0 +1,4 @@
+function convertReason(exit_reason, exit_reason_detail){
+  
+  return exit_reason + ' : ' + exit_reason_detail
+}

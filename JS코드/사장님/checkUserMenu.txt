@@ -1,0 +1,28 @@
+function checkUserMenu() {
+
+    try {
+
+        var list_menu = getGlobal('list_menu')
+
+        for (var i = 0; i < list_menu.length; i++) {
+            if (list_menu[i]['name'] == user_says) {
+
+                var menu_name = list_menu[i]['name']
+                var menu_price = list_menu[i]['price']
+
+                setGlobal('menu_name', menu_name)
+                setGlobal('menu_price', menu_price)
+
+                return 'true'
+            }
+        }
+        log('checkUserMenu function result : user says invalid menu name')
+        return 'false'
+
+    } catch (e) {
+        log('checkUserMenu try catch error : ')
+        log(e)
+        return 'false'
+    }
+
+}

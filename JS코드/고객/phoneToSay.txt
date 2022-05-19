@@ -1,0 +1,9 @@
+function phoneToSay(phone_number){
+  
+   var start = phone_number.substr(0, 3)
+   var mid = phone_number.substr(3, 4)
+   var end = phone_number.substr(7, 4)
+   
+   return start + '-' + mid + '-' + end
+  
+}

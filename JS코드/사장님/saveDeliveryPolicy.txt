@@ -1,0 +1,21 @@
+function saveDeliveryPolicy(dong, delivery_min, delivery_fee_edit, delivery_free) {
+  
+    log('savePolicy is activated')
+
+    let task = getGlobal('task')
+    let policy
+    if(task === '배달 지역 동 단위 추가/삭제' && getGlobal('location_type') === '배달 지역 삭제') {
+      policy = dong
+    }else{
+      policy = dong + '_~,' + delivery_min + '_~,' + delivery_fee_edit + '_~,' + delivery_free
+    }
+    
+    var delivery_policy = getGlobal('delivery_policy')
+    delivery_policy.push(policy)
+    log('delivery_policy : ' + delivery_policy)
+    
+    setGlobal('delivery_policy', delivery_policy)
+    
+    return 'true'
+
+}

@@ -1,0 +1,85 @@
+function getAddMenuResult() {
+
+    log('getAddMenuResult function is acitvated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+    try {
+
+        var company_info = getGlobal('company_info')
+        var telno = ''
+        const phone_number = getGlobal('phone_number')
+        if (phone_number !== '미수집' && phone_number !== 'false') {
+          telno = phone_number
+        } else {
+          telno = company_info['phone']
+        }
+        var ceo_name = company_info['owner']
+        var shop_name = company_info['restaurant_name']
+        var bl_number = company_info['company_number']
+
+        log('telno : ' + telno)
+        log('ceo_name : ' + ceo_name)
+        log('shop_name : ' + shop_name)
+        log('bl_number : ' + bl_number)
+        
+        var menu_policy = getGlobal('menu_policy')
+        
+        var explanation_list = ''
+        for(var i=0; i<(menu_policy.length - 1); i++){
+          explanation_list += menu_policy[i] + '_~|'
+        }
+        explanation_list += menu_policy[menu_policy.length - 1]
+        
+        var result = AddMenu('9', telno, ceo_name, shop_name, bl_number, explanation_list)
+        debugInfos.push({
+          timestamp: now, 
+          type: '메뉴추가',
+          user_id,
+          chatbot_type: '9',
+          telno,
+          ceo_name,
+          shop_name,
+          bl_number,
+          explanation_list,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+
+        log('AddMenu result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getAddMenuResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getAddMenuResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+
+    } catch (e) {
+      debugInfos.push({
+        timestamp: now, 
+        type: '메뉴추가',
+        user_id,
+        result: 'getAddMenuResult try catch error'
+      })
+      setGlobal('debug_infos', debugInfos)
+      log('getAddMenuResult try catch error : ')
+      log(e)
+      return 'false'
+    }
+
+}

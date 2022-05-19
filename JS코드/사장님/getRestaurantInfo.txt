@@ -1,0 +1,50 @@
+function getRestaurantInfo(phone_number) {
+
+    log('getRestaurantInfo function is activated')
+
+    try {
+
+        var result = RestaurantInfo(phone_number)
+        log('RestaurantInfor result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.length >= 1) {
+
+                list_company = []
+                for (var i = 0; i < result.length; i++) {
+
+                    if(result[i].hasOwnProperty('company_number') === true){
+                        var num = result[i]['company_number']
+                        if (num != '') {
+                            list_company.push(result[i])
+                        }
+                    }
+                    
+                }
+                setGlobal('list_company', list_company)
+                return 'true'
+
+            } else {
+
+                log('getRestaurantInfo function result : no restaurant')
+                return 'no_restaurant'
+            }
+
+        } else {
+            log('getRestaurantInfo function result : no restaurant')
+            return 'false'
+        }
+
+
+    } catch (e) {
+
+        log('getRestaurantInfo try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+
+}

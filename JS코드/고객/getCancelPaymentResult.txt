@@ -1,0 +1,84 @@
+function getCancelPaymentResult(phone_number, restaurant_name, cancel_number, order_date, detail_contents) {
+
+    log('getCancelPaymentResult function is activated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+
+    try {
+
+        var converted_date = order_date.split('일')[0]
+        converted_date = converted_date.replace('년 ', '-')
+        converted_date = converted_date.replace('월 ', '-')
+        converted_date = converted_date.replace('"', '')
+        converted_date = converted_date.toString() + 'T00:00:00.000Z'
+
+        log('phone_number : ' + phone_number)
+        log('restaurant_name : ' + restaurant_name)
+        log('cancel_number : ' + cancel_number)
+        log('converted_date : ' + converted_date)
+        log('detail_contents : ' + detail_contents)
+         
+        var result = CancelPayment("SCH10402", phone_number, restaurant_name, cancel_number, converted_date, detail_contents)
+        debugInfos.push({
+          timestamp: now, 
+          type: '오배달누락 결제취소',
+          user_id,
+          entity_type: 'SCH10402',
+          entity_phoneNumber: phone_number,
+          entity_restaurantName: restaurant_name,
+          entity_orderNumber: cancel_number,
+          entity_orderDate: converted_date,
+          entity_detailContents: detail_contents,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+        log('CancelPayment result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getCancelPaymentResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getCancelPaymentResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+    } catch (e) {
+        debugInfos.push({
+          timestamp: now, 
+          type: '오배달누락 결제취소',
+          user_id,
+          result: 'getCancelPaymentResult try catch error'
+        })
+        setGlobal('debug_infos', debugInfos)
+
+        log('getCancelPaymentResult function try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+}
+
+function addZero(my_date) {
+
+    if (my_date.length == 2) {
+        return '0' + my_date[1]
+    } else {
+        return my_date.substr(1, 2)
+    }
+
+}
+

@@ -1,0 +1,54 @@
+function getRestaurantDetail(companyInfo) {
+  try {
+    const detail = RestaurantInfoDetail(String(companyInfo['restaurant_id']))
+    log('detail: ')
+    log(JSON.stringify(detail, null, '  '))
+    if (!isEmpty(detail) && detail.hasOwnProperty('restaurant_name')) {
+      return {
+        ...companyInfo,
+        'phone': detail['phone'],
+        'owner': detail['owner']
+      }
+    }
+  } catch (e) {
+    log('getRestaurantDetail function try catch error')
+    log(e)
+  }
+  return undefined
+}
+
+function getRestaurantInfoDetail() {
+  try {
+    const companies = []
+    if (getGlobal('select_all') === 'true') {
+      companies.push(...getGlobal('list_company'))
+    } else {
+      companies.push(getGlobal('company_info'))
+    }
+    log('getRestaurantInfoDetail ' + JSON.stringify(companies))
+    const details = []
+    for (let i = 0; i < companies.length; ++i) {
+      const detail = getRestaurantDetail(companies[i])
+      if (!detail) {
+        log('getRestaurantInfoDetail function result : Failed')
+        return 'false'
+      }
+
+      details.push(detail)
+      if (i === 0) {
+        setGlobal('company_info', detail)
+        setGlobal('bl_number', detail['company_number'])
+        setGlobal('telno', detail['phone'])
+        setGlobal('ceo_name', detail['owner'])
+        setGlobal('restaurant_name', detail['restaurant_name'])
+        setGlobal('restaurant_id', detail['restaurant_id'])
+      }
+    }
+    setGlobal('company_details', details)
+    return 'true'
+  } catch (e) {
+    log('getRestaurantInfoDetail function try catch error : ')
+    log(e)
+  }
+  return 'false'
+}

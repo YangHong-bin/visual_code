@@ -1,0 +1,7 @@
+function isInRange (parameter) {
+    if (parameter > 0 && parameter <1000000) {
+        return "true"
+    } else {
+        return "false"
+    }
+}

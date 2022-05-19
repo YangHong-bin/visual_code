@@ -1,0 +1,5 @@
+function convertFoodsEtc(edit_detail){
+  
+  return '변경 요청사항 : ' + edit_detail
+  
+}

@@ -1,0 +1,21 @@
+function saveAdr(user_pick) {
+    log('saveAdr function is acitvated')
+    var list_found = getGlobal('list_found')
+    
+    var dong = ''
+    if (user_pick == '네') {
+        log('user_pick : 네')
+        log('list_found : ' + list_found)
+        log('list_found : ' + list_found[2])
+        
+        dong = list_found[0][2]
+
+    } else {
+        log('user_pick : ' + user_pick)
+        dong = list_found[Number(user_pick) - 1][2]
+    }
+
+    setGlobal('dong', dong)
+    return 'true'
+
+}

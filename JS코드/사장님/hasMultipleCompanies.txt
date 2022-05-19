@@ -1,0 +1,44 @@
+function hasMultipleCompanies() {
+  log('hasMultipleCompanies is activated')
+  try {
+    const list_company = getGlobal('list_company')
+    if (list_company === '미수집') {
+      return 'empty'
+    }
+
+    const restaurantMap = {}
+    for (let i = 0; i < list_company.length; ++i) {
+      if (list_company[i].hasOwnProperty('company_number')) {
+        const companyNumber = list_company[i].company_number
+        if (restaurantMap.hasOwnProperty(companyNumber)) {
+          restaurantMap[companyNumber].push(list_company[i])
+        } else {
+          restaurantMap[companyNumber] = [list_company[i]]
+        }
+      }
+    }
+
+    const companyNumbers = Object.keys(restaurantMap)
+    if (companyNumbers.length === 0) {
+      return 'empty'
+    } else if (companyNumbers.length > 1) {
+      return 'multiple company'
+    }
+
+    const restaurants = restaurantMap[companyNumbers[0]]
+    setGlobal('company_number', companyNumbers[0])
+    setGlobal('list_selected_company', restaurants)
+    if (restaurants.length === 1) {
+      setGlobal('restaurant_name', restaurants[0].restaurant_name)
+      setGlobal('company_info', restaurants[0])
+      return 'one restaurant'
+    } else if (restaurants.length === 0) {
+      return 'empty'
+    }
+    return 'multiple restaurant'
+  } catch (e) {
+    log('hasMultipleCompanies try catch error : ')
+    log(e)
+    return 'false'
+  }
+}

@@ -1,0 +1,29 @@
+function getRestaurantSection() {
+
+    try {
+
+        var restaurant_id = getGlobal('restaurant_id')
+        log('restaurant_id : ' + restaurant_id)
+        
+        var result = RestaurantSection(String(restaurant_id))
+        log('RestaurantSection webhook result : ')
+
+        if (result.hasOwnProperty('items')) {
+            result['items'].sort(function (a, b) { return a.id - b.id })
+            log(JSON.stringify(result, null, ' '))
+            setGlobal('list_sections', result['items'])
+            return 'true'
+
+        } else {
+            log(JSON.stringify(result, null, ' '))
+            log('getRestaurantSection result : webhook result is not valid')
+            return 'false'
+        }
+
+    } catch (e) {
+        log('getRestaurantSection try catch error : ')
+        log(e)
+        return 'false'
+    }
+
+}

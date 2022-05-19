@@ -1,0 +1,78 @@
+function getSetOffDayResult() {
+  log('getSetOffDayResult function is activated')
+  const user_id = getUserId()
+  const debugInfos = []
+  const now = new Date().toISOString()
+  try {
+    var list_days = getGlobal('list_days')
+    var splited = list_days.split(',')
+    var day_of_weeks = ''
+    for (var i = 0; i < splited.length; i++) {
+      day_of_weeks += splited[i] + '_~|'
+    }
+    var len = day_of_weeks.length
+    day_of_weeks = day_of_weeks.substring(0, len - 1)
+
+    const auth_phone_number = getGlobal('phone_number')
+    const companies = []
+    // if (getGlobal('select_all') === 'true') {
+      // companies.push(...getGlobal('company_details'))
+    // } else {
+    companies.push(getGlobal('company_info'))
+    // }
+
+    for (let i = 0; i < companies.length; ++i) {
+      let telno
+      if (auth_phone_number !== '미수집' && auth_phone_number !== 'false') {
+        telno = auth_phone_number
+      } else {
+        telno = companies[i]['phone']
+      }
+      const ceo_name = companies[i]['owner']
+      const shop_name = companies[i]['restaurant_name']
+      const bl_number = companies[i]['company_number']
+      log('company info : ' + telno + '/' + ceo_name + '/' + shop_name + '/' + bl_number)
+      log('day_of_weeks : ' + day_of_weeks)
+      var result = SetOffDay('8', telno, ceo_name, shop_name, bl_number, day_of_weeks)
+      debugInfos.push({
+        timestamp: now, 
+        type: '정기휴무일변경',
+        user_id,
+        chatbot_type: '8',
+        telno,
+        ceo_name,
+        shop_name,
+        bl_number,
+        day_of_weeks,
+        result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+      })
+      log('SetOffDay result : ')
+      log(JSON.stringify(result, null, ' '))
+      log('SetOffTime result : ')
+      log(JSON.stringify(result, null, ' '))
+      if (isEmpty(result)) {
+        log('getSetOffDayResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      } else if (!result.hasOwnProperty('entityStatus')) {
+        log('getSetOffDayResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      }
+    }
+    
+    setGlobal('debug_infos', debugInfos)
+    return 'true'
+  } catch (e) {
+    debugInfos.push({
+      timestamp: now, 
+      type: '정기휴무일변경',
+      user_id,
+      result: 'getSetOffDayResult try catch error'
+    })
+    setGlobal('debug_infos', debugInfos)
+    log('getSetOffDayResult try catch error : ')
+    log(e)
+    return 'false'
+  }
+}

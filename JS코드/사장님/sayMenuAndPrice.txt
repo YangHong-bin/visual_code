@@ -1,0 +1,44 @@
+function sayMenuAndPrice(resay) {
+  const link =  {
+  "mobile": "https://owner.yogiyo.co.kr/owner/app-download?deeplink=ygyownerapp://restaurant/out_of_dish",
+  "android": "ygyownerapp://restaurant/out_of_dish",
+  "ios": "ygyownerapp://restaurant/out_of_dish"
+  }
+  const answers = []
+  if (resay === 'true') {
+    return [
+      '죄송합니다. 제가 지금 도와드릴 수 있는 일이 아니에요. 😥\n\n' +
+      '✅  다음 중, 진행하고 싶은 항목을 선택해주세요.'
+    ]
+  }
+  return [{
+    cardFormat: {
+      title: 
+      "",
+      bodyText: 
+      "■ 메뉴/가격 관리를 하시려면 아래 버튼을 눌러주세요.\n" +
+      "■ 메뉴 품절 설정은 사장님 앱에서 가능합니다.",
+      buttons: [
+        {
+          displayText: '메뉴 추가/삭제',
+          reaction: {
+            text: '메뉴 추가/삭제'
+          }
+        },
+        {
+          displayText: '메뉴/가격 변경',
+          reaction: {
+            text: '메뉴/가격 변경'
+          }
+        },
+        {
+          displayText: '메뉴 품절 설정',
+          reaction: {
+            json: JSON.stringify(link)
+          }
+        }
+      ]
+    },
+    subtype: '딥링크'
+  }]
+}

@@ -1,0 +1,12 @@
+function getContactTime2(start, end) {
+  log('contact time2 ' + start + '/' + end)
+  if (start === '오전 10:00:00' && end === '오후 1:00:00') {
+    return '오전10시 - 오후1시'
+  } else if (start === '오후 1:00:00' && end === '오후 4:00:00') {
+    return '오후1시 - 오후4시'
+  } else if (start === '오후 4:00:00' && end === '오후 7:00:00') {
+    return '오후4시 - 오후7시'
+  }
+  
+  return 'false'
+}

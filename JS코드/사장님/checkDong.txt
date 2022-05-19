@@ -1,0 +1,57 @@
+function checkDong(dong){
+    
+    var list_location = returnLocation()
+
+    list_found = []
+
+    for(var i=0; i<list_location.length; i++){
+
+        let list_this_dong = list_location[i]['dong']
+
+        for(var j=0; j<list_this_dong.length; j++){
+            if(list_this_dong[j] == dong){
+                let city = list_location[i]['city']
+                let gu = list_location[i]['gu']
+                list_found.push([city, gu, dong])
+            }
+        }
+
+    }
+
+    if(list_found.length < 1){
+    
+        setGlobal('dong_check', 'no_location')
+        return "no_location"
+
+    }else if(list_found.length == 1){
+
+        setGlobal('list_found', list_found)
+        setGlobal('dong_check', 'one_location')
+        return "one_location"
+
+    }else if(list_found.length > 1){
+
+        setGlobal('list_found', list_found)
+        setGlobal('dong_check', 'several_location')
+        return "several_location"
+
+    }
+
+}
+
+function returnLocation(){
+
+    let location = [
+        {
+          "city": "서울특별시",
+          "gu": "중랑구",
+          "dong": [
+            "상봉제2동",
+            "면목제4동",
+          ]
+        }
+      ]
+
+      return location
+
+}

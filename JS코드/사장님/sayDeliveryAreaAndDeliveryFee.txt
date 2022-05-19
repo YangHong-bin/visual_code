@@ -1,0 +1,23 @@
+function sayDeliveryAreaAndDeliveryFee(resay) {
+  const answers = []
+  if (resay === 'true') {
+    answers.push(createTextFormat([
+      '죄송합니다. 제가 지금 도와드릴 수 있는 일이 아니에요. 😥\n\n' +
+      '✅  다음 중, 진행하고 싶은 항목을 선택해주세요.'
+    ]))
+  }
+  answers.push(createCardFormat(
+    '',
+    '■ 배달 지역/배달료 관리 신청을 하시려면 유형에 맞춰 아래 버튼을 눌러주세요.\n' +
+    '■ 배달료 및 최소주문금액 직접 변경은 사장님 사이트에서 직접 변경이 가능합니다.\n' +
+    '※아래 배달요금 셀프관리방법 버튼을 눌러 자세한 경로를 확인해주세요.',
+    '',
+    [
+      createTextButton('배달 지역 변경', '배달 지역 변경'),
+      createTextButton('배달료/최소주문금액 변경', '배달료/최소주문금액 변경'),
+      createTextButton('배달요금 셀프관리 방법', '배달요금 셀프관리 방법'),
+    ]
+  ))
+  log('Answers' + JSON.stringify(answers, null, '  '))
+  return answers
+}

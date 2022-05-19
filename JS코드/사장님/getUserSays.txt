@@ -1,0 +1,5 @@
+function getUserSays(){
+  
+  return user_says
+  
+}

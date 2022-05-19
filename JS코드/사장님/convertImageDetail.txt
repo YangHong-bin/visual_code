@@ -1,0 +1,4 @@
+function convertImageDetail(image_category, image_menu, image_detail) {
+  const details = image_detail.replace(/,/gi, '')
+  return [image_category, image_menu, details].join('_~,')
+}

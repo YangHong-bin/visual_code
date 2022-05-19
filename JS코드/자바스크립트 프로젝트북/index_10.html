@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<h1 id='title'> 할 일 목록</h1><br>
+<button id="add-btn">목록 추가</button>
+<ul id='list'>
+    <li>제목 1</li>>
+    <li>제목 2</li>>
+    <li>제목 3</li>>
+    <li>제목 4</li>>
+</ul>
+<style>
+    #add-btn {
+        padding: 5px 10px;
+        border: 0;
+        background: #f80;
+        color: white;
+        border-radius: 5px;
+    }
+    
+    ul {
+        padding: 0;
+        list-style-position: inside;
+    }
+    
+    li {
+        border-bottom: 1px solid #999;
+        padding: 5px 0;
+    }
+    
+    .active {
+        background: #abc;
+    }
+</style>
+
+<script>
+    var title = document.getElementById('title');
+    var list = document.getElementById('list');
+    var li = list.getElementByTagName('li');
+    var addBtn = document.getElementById('add-btn'); //제목 추가 버튼
+
+    for (var i = 0; i < li.length; i++) {
+        li[i].addEventListener('click', activeItem);
+    }
+
+    function activeItem(event) {
+
+        tilte.innerHTML = this.innerText;
+        this.setAttribute('class', 'active');
+    }
+    addBtn.addEventListener('click', function() {
+        var txt = prompt('제목 입력');
+        list.innerHTML += '<li>' + txt + '</li>';
+
+    });
+</script>
+
+
+</html>

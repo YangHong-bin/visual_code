@@ -1,0 +1,9 @@
+function isEmpty(value){ 
+  
+  if( value === "" || value === null || value === undefined || value == 'false' || value === NaN || value == 'NaN' || value == '미수집' || value == []){
+    return true 
+  }else{ 
+    return false 
+  } 
+  
+}

@@ -1,0 +1,87 @@
+function checkTime(this_time) {
+
+    try {
+
+        //2018년 1월 23일
+        //20210123
+
+        var year = ''
+        var month = ''
+        var day = ''
+        var today = new Date()
+        
+        log('this_time : ' + this_time)
+
+        if (this_time.indexOf('.') != -1) {
+
+            var year_splited = this_time.split('.')
+            log('year_splited : ' + year_splited)
+            year = year_splited[0]
+            year = year.replace(/(\s*)/g, "")
+
+            month = year_splited[1]
+            month = month.replace(/(\s*)/g, "")
+      
+            day = year_splited[2]
+            day = day.replace(/(\s*)/g, "")
+            
+
+        } else if (this_time.length == 8) {
+
+            year = this_time.substr(0, 4)
+            month = this_time.substr(4, 2)
+            day = this_time.substr(6, 2)
+
+        } else if (this_time == '즉시') {
+
+            year = today.getFullYear()
+            month = Number(today.getMonth()) + 1
+            day = today.getDate()
+            
+            var exit_date = year + '년 ' + month + '월 ' + day + '일'
+            setGlobal('exit_date', exit_date)
+
+            return 'true'
+
+        } else {
+            log('checkTime function result : not expected time format')
+            return 'false'
+        }
+
+        log('year : ' + year)
+        log('month : ' + month)
+        log('day : ' + day)
+
+        var this_datetime = new Date(year, Number(month) - 1, day)
+
+        var hour = today.getHours()
+        var minute = today.getMinutes()
+        var second = today.getSeconds()
+
+        this_datetime.setHours(hour)
+        this_datetime.setMinutes(minute)
+        this_datetime.setSeconds(second)
+
+        log('this_datetime : ' + String(this_datetime))
+        log('today : ' + String(today))
+
+        if (this_datetime >= today) {
+
+            var exit_date = year + '년 ' + month + '월 ' + day + '일'
+            setGlobal('exit_date', exit_date)
+
+            return 'true'
+
+        } else {
+            log('checkTime function result : user says past time')
+            return 'false'
+        }
+
+
+    } catch (e) {
+        log('checkTime try catch error ; ')
+        log(e)
+        return 'false'
+    }
+
+}

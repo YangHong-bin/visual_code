@@ -1,0 +1,58 @@
+function selectRestaurantName() {
+
+    var list_selected_company = getGlobal('list_selected_company')
+    var company_names = getGlobal('company_names')
+
+    var message = ''
+    var task = getGlobal('task')
+
+    var res_name_start = getGlobal('res_name_start')
+    var res_name_end = getGlobal('res_name_end')
+
+    var list_buttons = []
+    //if (task == "요일별 영업시간 설정" || task == "브레이크타임 설정" || task == "정기 휴무일 설정" || task == "요일별 영업시간 설정" || task == '배달 지역 변경' || task == '배달료/최소주문금액 변경' || task == '배달 지역 동 단위 추가/삭제') {
+    //    list_buttons.push([createTextButton('모두 선택', '모두 선택')])
+    //}
+
+    if ((res_name_start == '미수집') || res_name_start == '0') {
+        log('selectRestaurantName : first company number list')
+
+        res_name_start = '0'
+        if (company_names.length > 9) {
+            res_name_end = '9'
+        } else {
+            res_name_end = company_names.length
+        }
+        setGlobal('res_name_start', res_name_start)
+        setGlobal('res_name_end', res_name_end)
+
+        message = '선택하신 사업자등록번호로 상호명이 여러 건 조회됐습니다.'
+
+    } else {
+        log('selectRestaurantName : not first company number list')
+        message = '조회된 상호명 개수가 9건을 초과하여, 나머지 번호를 보여드릴게요.'
+
+    }
+
+    message += '\n\n' + task + ' 접수에 사용할 상호명을 아래 버튼 중에서 선택해주세요.'
+    // message += '\n\n✅ 모든 사업체에 동일하게 적용하시려면 <모두 선택>을 선택해주세요.'
+
+    for (var i = Number(res_name_start); i < Number(res_name_end); i++) {
+        list_buttons.push(createTextButton(company_names[i], (i + 1) + '번 사업체 선택'))
+    }
+
+    if (company_names.length != res_name_end) {
+        message += '\n✅ 최대 8개의 상호명을 보여드립니다. 나머지 상호명을 보려면 <더보기> 버튼을 눌러주세요.'
+        list_buttons.push(createTextButton('더보기', '더보기'))
+    }
+
+    var list_answer = []
+    list_answer.push(createTextFormat([message]))
+    list_answer.push(createButtonsFormat(list_buttons))
+
+    log('selectRestaurantName list_answer : ')
+    log(JSON.stringify(list_answer, null, ' '))
+
+    return list_answer
+
+}

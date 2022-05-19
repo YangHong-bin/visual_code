@@ -1,0 +1,20 @@
+function saveOrder(order_number) {
+
+    var order_list = getGlobal('order_list')
+
+    for (var i = 0; i < order_list.length; i++) {
+
+        if (order_list[i]['order_number'] == order_number) {
+            var submitted_at = order_list[i]['submitted_at']
+            var total_price = order_list[i]['total_price']
+
+            setGlobal('this_order_date', submitted_at)
+            setGlobal('this_price', total_price)
+            return 'true'
+        }
+
+    }
+
+    return 'false'
+
+}

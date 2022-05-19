@@ -1,0 +1,84 @@
+function getRestaurantOrder() {
+
+    log('getRestaurnatOrder function is activated');
+
+    try {
+
+        var phone_number = getGlobal('phone_number');
+
+        var result = RestaurantOrder(phone_number);
+            //result = RestaurantOrderMock();
+        if (!isEmpty(result)) {
+            const current = new Date();
+            var order_list = [];
+            for (var i = 0; i < result.length; i++) {
+                log('Order' + JSON.stringify(result, null, '  '));
+                if (result[i].result_key !== 'tts_processing' &&
+                    result[i].result_key !== 'tts_transmitted' &&
+                    result[i].result_key !== '9c_transmitted' &&
+                    result[i].result_key !== 'sms_transmitted' &&
+                    result[i].result_key !== 'terminal_transmitted' &&
+                    result[i].result_key !== 'transmitted' &&
+                    result[i].result_key !== 'Try TTS relay' &&
+                    result[i].result_key !== 'TTS relay transmitted' &&
+                    result[i].result_key !== '9 cookies relay transmitted' &&
+                    result[i].result_key !== 'Order Transmitted') {
+                  continue;
+                }
+                var this_order = {};
+                if (result[i].hasOwnProperty('submitted_at')) {
+                    var submitted_at = result[i]['submitted_at'];
+                    const submittedDate = new Date(submitted_at);
+                    const diff = Math.floor((current - submittedDate) / (1000*60*60));
+                    if (diff >= 24) {
+                      continue;
+                    }
+                    this_order['submitted_at'] = submitted_at;
+
+                }
+                if (result[i].hasOwnProperty('ordered_items')) {
+                    var ordered_items = result[i]['ordered_items'];
+                    this_order['ordered_items'] = ordered_items;
+
+                }
+                if (result[i].hasOwnProperty('total_price')) {
+                    var total_price = result[i]['total_price'];
+                    this_order['total_price'] = total_price;
+
+                }
+                if (result[i].hasOwnProperty('order_number')) {
+                    var order_number = result[i]['order_number'];
+                    this_order['order_number'] = order_number;
+                }
+                if (result[i].hasOwnProperty('delivery_method')) {
+                    var delivery_method = result[i]['delivery_method'];
+                    this_order['delivery_method'] = delivery_method;
+                }
+                if (result[i].hasOwnProperty('restaurant_phone')) {
+                    var restaurant_phone = result[i]['restaurant_phone'];
+                    this_order['restaurant_phone'] = restaurant_phone;
+                }
+                order_list.push(this_order);
+            }
+            
+            if(order_list.length != 0){
+              setGlobal('order_list', order_list);
+              return 'true';
+            }else{
+              log('getRestaurantOrder function result : order_list is empty');
+              return 'false';
+            }
+
+        } else {
+            log('getRestaurant function result : webhook result is empty ');
+            return 'false';
+        }
+
+    } catch (e) {
+
+        log('getRestaurant try catch error : ');
+        log(e);
+        return 'false';
+    }
+
+}

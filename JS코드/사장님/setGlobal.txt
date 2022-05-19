@@ -1,0 +1,15 @@
+function setGlobal(parameter, my_value) {
+  
+    try {
+        if (my_value !== null && typeof my_value !== 'undefined' && my_value !== '') {
+            hermes_context[parameter] = my_value
+            return "true"
+        } else {
+            return "false"
+        }
+    } catch (e) {
+        log('setGlobal try catch error : ')
+        log(e)
+        return "false"
+    }
+}

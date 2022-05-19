@@ -1,0 +1,27 @@
+function sayOrderNumber_2() {
+  
+    var order_list = getGlobal('order_list');
+    var list_card = []
+    
+    var last = 10
+    if(order_list.length < 10){
+      last = order_list.length
+    }
+    for (var i = 0; i < last; i++) {
+        var order_number = order_list[i]['order_number']
+        if (!isEmpty(order_number)) {
+
+            var title = '주문 번호 | ' + order_number
+            var body_text = '주문 접수 시간 : ' + order_list[i]['submitted_at']
+            body_text += '\n주문 금액 : ' + convertPrice(order_list[i]['total_price'].toString()) + '원'
+            body_text += '\n주문 내역 : ' + order_list[i]['ordered_items']
+
+            list_card.push(createCard(title, body_text, '', [createTextButton('이 주문번호 선택', (i+1) + '번 주문 선택')]))
+
+
+        }
+    }
+
+    return createCarousel(list_card)
+
+}

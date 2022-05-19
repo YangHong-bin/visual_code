@@ -1,0 +1,3 @@
+function parseIntStr(numberStr) {
+  return parseInt(numberStr).toString()
+}

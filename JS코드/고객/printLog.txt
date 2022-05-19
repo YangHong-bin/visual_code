@@ -1,0 +1,4 @@
+function printLog(data){
+    log("printLog : " + JSON.stringify(data))
+    return true
+}

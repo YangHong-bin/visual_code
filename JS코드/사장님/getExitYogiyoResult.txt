@@ -1,0 +1,80 @@
+function getExitYogiyoResult(exit_reason, exit_date) {
+
+    log('getExitYogiyoResult function is acitvated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+
+    try {
+
+        var company_info = getGlobal('company_info')
+        var telno = ''
+        const phone_number = getGlobal('phone_number')
+        if (phone_number !== '미수집' && phone_number !== 'false') {
+          telno = phone_number
+        } else {
+          telno = company_info['phone']
+        }
+        var ceo_name = company_info['owner']
+        var shop_name = company_info['restaurant_name']
+        var bl_number = company_info['company_number']
+
+        log('telno : ' + telno)
+        log('ceo_name : ' + ceo_name)
+        log('shop_name : ' + shop_name)
+        log('bl_number : ' + bl_number)
+        log('exit_reason: ' + exit_reason)
+        log('exit_date: ' + exit_date)
+
+        var result = ExitYogiyo('13', telno, ceo_name, shop_name, bl_number, exit_reason, exit_date)
+        debugInfos.push({
+          timestamp: now, 
+          type: '전체가맹점해지',
+          user_id,
+          chatbot_type: '13',
+          telno,
+          ceo_name,
+          shop_name,
+          bl_number,
+          cause: exit_reason,
+          date: exit_date,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+
+        log('ExitYogiyo result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+              
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getExitYogiyoResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getExitYogiyoResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+
+    } catch (e) {
+        debugInfos.push({
+          timestamp: now, 
+          type: '전체가맹점해지',
+          user_id,
+          result: 'getExitYogiyoResult try catch error'
+        })
+        setGlobal('debug_infos', debugInfos)
+        log('getExitYogiyoResult try catch error : ')
+        log(e)
+        return 'false'
+    }
+}

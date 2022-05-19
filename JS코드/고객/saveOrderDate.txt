@@ -1,0 +1,28 @@
+function saveOrderDate(cancel_number){
+  
+  log('saveOrderDate is activated')
+  
+  try{
+    
+    var order_list = getGlobal('order_list')
+    
+    for(var i=0; i<order_list.length; i++){
+      
+      if(order_list[i]['order_number'] == cancel_number){
+        var order_date = convertDate(order_list[i]['submitted_at'])
+        return order_date
+      }
+      
+    }
+    
+    return 'false'
+    
+  }catch(e){
+    
+    log('saveOrderDate try catch error : ')
+    log(e)
+    return 'false'
+    
+  }
+  
+}

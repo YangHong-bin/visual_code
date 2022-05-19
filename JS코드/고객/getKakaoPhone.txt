@@ -1,0 +1,36 @@
+function getKakaoPhone(){
+  
+  
+  try{
+    log('getKakaoPhone ' + JSON.stringify(hermes_context, null, '  ') )
+
+    var phone_number = hermes_context.kakao_profile.phone_number
+    
+    if(hermes_context.hasOwnProperty('kakao_profile')){
+      if(hermes_context['kakao_profile'].hasOwnProperty('phone_number')){
+        if(phone_number !== undefined){
+          phone = '0' + phone_number.split(' ')[1]
+          setGlobal('phone_number', phone)
+          return phone
+        }else{
+          log('getKakaoPhone result : phone_number is undefined')
+          return 'false'
+        }
+      }else{
+        log('getKakaoPhone result : no_phone_number')
+        return 'false'
+      }
+    }else{
+      log('getKakaoPhone result : no_profile')
+      return 'false'
+    }
+    
+  }catch(e){
+    
+    log('getKakaoPhone try catch error : ')
+    log(e)
+    return 'false'
+    
+  }
+  
+}

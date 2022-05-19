@@ -1,0 +1,84 @@
+function getDeviceReturnResult(device_phone, device_contact_time, device_reason, device_address) {
+
+    log('getDeviceReturnResult function is activated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+    try {
+
+        var company_info = getGlobal('company_info')
+        var telno = ''
+        const phone_number = getGlobal('phone_number')
+        if (phone_number !== '미수집' && phone_number !== 'false') {
+          telno = phone_number
+        } else {
+          telno = company_info['phone']
+        }
+        var ceo_name = company_info['owner']
+        var shop_name = company_info['restaurant_name']
+        var bl_number = company_info['company_number']
+
+        log('telno : ' + telno)
+        log('ceo_name : ' + ceo_name)
+        log('shop_name : ' + shop_name)
+        log('bl_number : ' + bl_number)
+        log('callback_telno : ' + device_phone)
+        log('callback_time ; ' + device_contact_time)
+        log('cause : ' + device_reason)
+        log('device_address : ' + device_address)
+
+        var result = DeviceReturn('12', telno, ceo_name, shop_name, bl_number, device_phone, device_contact_time, device_reason, device_address)
+        debugInfos.push({
+          timestamp: now, 
+          type: '단말기반납요청',
+          user_id,
+          chatbot_type: '12',
+          telno,
+          ceo_name,
+          shop_name,
+          bl_number,
+          callback_telno: device_phone,
+          callback_time: device_contact_time,
+          cause: device_reason,
+          address: device_address,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+        log('DeviceReturn Result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getDeviceReturnResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getDeviceReturnResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+    } catch (e) {
+        debugInfos.push({
+          timestamp: now, 
+          type: '단말기반납요청',
+          user_id,
+          result: 'getDeviceReturnResult try catch error'
+        })
+        setGlobal('debug_infos', debugInfos)
+        log('getDeviceReturnResult try catch error : ')
+        log(e)
+
+        return 'false'
+    }
+
+
+}

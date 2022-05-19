@@ -1,0 +1,77 @@
+function getAccountResult(phone_number, email, account_phone, account_type, signup_type) {
+
+    log('getAccountResult function is activated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+
+    try {
+
+        var account_map = {
+            '휴면 계정': 'SCH10601',
+            '탈퇴 계정': 'SCH10602'
+        }
+
+        var signup_map = {
+            '일반 이메일': 'SCH10701',
+            '네이버로 로그인': 'SCH10702',
+            '카카오톡으로 로그인': 'SCH10703',
+            '애플로 로그인': 'SCH10704'
+        }
+
+        var account_status_code = account_map[account_type]
+        var signup_type_code = signup_map[signup_type]
+
+        var result = AccountRepair("SCH10405", phone_number, email, account_phone, account_status_code, signup_type_code)
+        debugInfos.push({
+          timestamp: now, 
+          type: '계정복구',
+          user_id,
+          entity_type: 'SCH10405',
+          entity_phoneNumber: phone_number,
+          entity_email: email,
+          entity_accountNumber: account_phone,
+          entity_accountStatusCode: account_status_code,
+          entity_signUpTypeCode: signup_type_code,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+        log('Account result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getAccountResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getAccountResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+    } catch (e) {
+        debugInfos.push({
+          timestamp: now, 
+          type: '계정복구',
+          user_id,
+          result: 'getAccountResult try catch error'
+        })
+        setGlobal('debug_infos', debugInfos)
+
+        log('getAccountResult function try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+}
+

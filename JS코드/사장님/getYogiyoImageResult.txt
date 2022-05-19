@@ -1,0 +1,91 @@
+function getYogiyoImageResult(image_type, image_detail) {
+
+    log('getYogiyoImageResult function is acitvated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+
+    try {
+
+        var company_info = getGlobal('company_info')
+        var telno = ''
+        const phone_number = getGlobal('phone_number')
+        if (phone_number !== '미수집' && phone_number !== 'false') {
+          telno = phone_number
+        } else {
+          telno = company_info['phone']
+        }
+        var ceo_name = company_info['owner']
+        var shop_name = company_info['restaurant_name']
+        var bl_number = company_info['company_number']
+
+        log('telno : ' + telno)
+        log('ceo_name : ' + ceo_name)
+        log('shop_name : ' + shop_name)
+        log('bl_number : ' + bl_number)
+        
+        let details
+        if (image_type === '메뉴 사진') {
+          details = image_detail
+        } else {
+          details = image_detail.replace(/,/gi, '')
+        }
+        var image_map = {
+          '대표 사진' : 'THUMBNAIL',
+          '홈화면 사진' : 'HOME',
+          '배경 사진' : 'BG',
+          '메뉴 사진' : 'MENU'
+        }
+
+        var result = YogiyoImage('17', telno, ceo_name, shop_name, bl_number, image_map[image_type], details)
+        debugInfos.push({
+          timestamp: now, 
+          type: '요기요이미지로변경',
+          user_id,
+          chatbot_type: '17',
+          telno,
+          ceo_name,
+          shop_name,
+          bl_number,
+          explanation_type: image_map[image_type],
+          explanation: details,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+
+        log('YogiyoImage result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getYogiyoImageResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getYogiyoImageResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+
+    } catch (e) {
+      debugInfos.push({
+        timestamp: now, 
+        type: '요기요이미지로변경',
+        user_id,
+        result: 'getYogiyoImageResult try catch error'
+      })
+      setGlobal('debug_infos', debugInfos)
+      log('getYogiyoImageResult try catch error : ')
+      log(e)
+      return 'false'
+    }
+}

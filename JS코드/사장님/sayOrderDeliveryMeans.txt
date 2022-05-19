@@ -1,0 +1,23 @@
+function sayOrderDeliveryMeans(resay) {
+  const answers = []
+  if (resay === 'true') {
+    answers.push(createTextFormat([
+      '죄송합니다. 제가 지금 도와드릴 수 있는 일이 아니에요. 😥\n\n' +
+      '✅  다음 중, 진행하고 싶은 항목을 선택해주세요.'
+    ]))
+  }
+  answers.push(createCardFormat(
+    '',
+    '■ 주문 전달 수단에 대한 자주묻는 질문을 준비했어요. 이용하시는 전달 수단을 선택해 확인해보세요.\n' +
+    '■ 주문 접수 문자/어플 번호 추가는 사장님 사이트에서 가능합니다. 주문전달 핸드폰 번호 추가 버튼을 눌러 사장님 사이트로 이동할 수 있습니다.\n' +
+    '※사장님사이트는 PC환경에서 더 원활하게 이용할 수 있습니다.',
+    '',
+    [
+      createTextButton('PC 접수 프로그램', 'PC 접수 프로그램'),
+      createTextButton('단말기', '단말기'),
+      createTextButton('주문전달 핸드폰 번호 추가', 'https://owner.yogiyo.co.kr/owner/profile/'),
+    ]
+  ))
+  log('Answers' + JSON.stringify(answers, null, '  '))
+  return answers
+}

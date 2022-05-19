@@ -1,0 +1,21 @@
+function checkVerificationCode (phone_number, verificationCode) {
+  try {
+    const result = CheckVericode(phone_number, verificationCode)
+    log('check verification code' + JSON.stringify(result))
+    if (result.result === 'true') {
+      return 'true'
+    }
+    if (result.result === 'false') {
+      return 'false'
+    }
+    if (result.result === 'expire') {
+      return 'expire'
+    }
+    if (result.result === 'too_many_trials') {
+      return 'too_many_trials'
+    }
+  } catch (e) {
+    log('Failed ot check verificationCode' + e)
+  }
+  return 'error'
+}

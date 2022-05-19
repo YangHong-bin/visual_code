@@ -1,0 +1,36 @@
+function convertDate(my_date){
+
+  var splited = []
+  var year = ''
+  var month = ''
+  var day = ''
+  var message = ''
+  
+  if(my_date.length == 10){
+    
+    year = my_date.split('-')[0]
+    month = my_date.split('-')[1]
+    day = my_date.split('-')[2]
+    
+  }else{
+    if(my_date.indexOf('T') != -1){
+      splited = my_date.split('T')
+    }else{
+      splited = my_date.split(' ')
+    }  
+    
+    var this_date = splited[0]
+
+    var splited_date = this_date.split('-')
+    year = splited_date[0]
+    month = splited_date[1]
+    day = splited_date[2]
+    
+  }
+  
+  message += year + '년 ' + month + '월 ' + day + '일'
+  
+  return message
+  
+  
+}

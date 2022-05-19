@@ -1,0 +1,92 @@
+function getSetOffTimeResult(task_name, time_start, time_end) {
+  log('getSetOffTimeResult function is activated')
+  const user_id = getUserId()
+  const debugInfos = []
+  const now = new Date().toISOString()
+  try {
+    const list_days = getGlobal('list_days')
+    const splited = list_days.split(',')
+
+    let day_of_weeks = ''
+    for (var i = 0; i < splited.length; i++) {
+      day_of_weeks += splited[i] + '_~|'
+    }
+    day_of_weeks = day_of_weeks.substring(0, day_of_weeks.length - 1)
+
+    let chatbot_type = ''
+    if (task_name == '영업시간') {
+      chatbot_type = '6'
+    } else {
+      chatbot_type = '7'
+    }
+
+    const auth_phone_number = getGlobal('phone_number')
+    const companies = []
+    // if (getGlobal('select_all') === 'true') {
+    //   companies.push(...getGlobal('company_details'))
+    // } else {
+    companies.push(getGlobal('company_info'))
+    // }
+
+    for (let i = 0; i < companies.length; ++i) {
+      let telno
+      if (auth_phone_number !== '미수집' && auth_phone_number !== 'false') {
+        telno = auth_phone_number
+      } else {
+        telno = companies[i]['phone']
+      }
+      const ceo_name = companies[i]['owner']
+      const shop_name = companies[i]['restaurant_name']
+      const bl_number = companies[i]['company_number']
+      log('chatbot_type : ' + chatbot_type)
+      log('telno : ' + telno)
+      log('ceo_name : ' + ceo_name)
+      log('shop_name : ' + shop_name)
+      log('bl_number : ' + bl_number)
+      log('day_of_weeks : ' + day_of_weeks)
+      log('start_time : ' + time_start)
+      log('end_time : ' + time_end)
+      var result = SetOffTime(chatbot_type, telno, ceo_name, shop_name, bl_number, day_of_weeks, time_start, time_end)
+      debugInfos.push({
+        timestamp: now, 
+        type: chatbot_type === '6' ? '영업시간변경' : '브레이크타임변경',
+        user_id,
+        chatbot_type,
+        telno,
+        ceo_name,
+        shop_name,
+        bl_number,
+        day_of_weeks,
+        start_time: time_start,
+        end_time: time_end,
+        result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+      })
+      
+      log('SetOffTime result : ')
+      log(JSON.stringify(result, null, ' '))
+      if (isEmpty(result)) {
+        log('getSetOffTimeResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      } else if (!result.hasOwnProperty('entityStatus')) {
+        log('getSetOffTimeResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      }
+    }
+    
+    setGlobal('debug_infos', debugInfos)
+    return 'true'
+  } catch (e) {
+    debugInfos.push({
+      timestamp: now, 
+      type: task_name === '영업시간' ? '영업시간변경' : '브레이크타임변경',
+      user_id,
+      result: 'getSetOffTimeResult try catch error'
+    })
+    setGlobal('debug_infos', debugInfos)
+    log('getSetOffTimeResult try catch error : ')
+    log(e)
+    return 'false'
+  }
+}

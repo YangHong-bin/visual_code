@@ -1,0 +1,57 @@
+Found 1 candidate intents/args.
+- Intent: 제니릭 메뉴 말하기
+Running node $RootNode.
+- Node condition: TRUE
+Skipping node $DialogControl.
+- Node condition: (UPDATED(#IMMEDIATELY_EXIT_DIALOG) OR UPDATED(#IMMEDIATELY_RESTART_DIALOG))
+Running node $MainTask.
+- Node condition: TRUE
+The condition $처음으로 condition is failed.
+@메뉴.name == "처음으로"
+Skipping node $처음으로.
+- Node condition: @메뉴.name == "처음으로"
+Skipping node $FAQ 이동(배달료).
+- Node condition: checkFAQUserSays() != "false"
+
+Running node $faq_item 수집.
+- Node condition: TRUE
+Skipping node $메뉴 상시 수집 (배달료 인상인하).
+- Node condition: UPDATED(#배달료 인상인하)
+Skipping node $FAQ_메뉴명/메뉴설명 이동.
+- Node condition: (@챗봇 수집 항목.name == "메뉴명" OR @챗봇 수집 항목.name == "메뉴 설명")
+Skipping node $FAQ_배달 지역 변경.
+- Node condition: ((@배달 지역 하위 항목.name == "배달 지역 추가" OR @배달 지역 하위 항목.name == "배달 지역 삭제") OR @배달 지역 하위 항목.name == "배달 지역 수정")
+Skipping node $메뉴 상시 수집.
+- Node condition: ((((((UPDATED(@메뉴) OR UPDATED(@정규 영업시간 변경 하위 항목)) OR UPDATED(@단말기 자주 묻는 질문)) OR UPDATED(@PC 주문 접수 자주 묻는 질문)) OR UPDATED(@이미지 유형)) OR UPDATED(@메뉴 관리 하위 항목)) OR UPDATED(@배달 지역 변경))
+Skipping node $메뉴 카테고리 수집.
+- Node condition: (NOT_INITIALIZED(menu) AND getGlobal("faq_reset") != "수집")
+
+Running node $리셋 변수 faq_reset.
+- Node condition: getGlobal("faq_reset") == "수집"
+Skipping node $영업 시간 관리로 이동.
+- Node condition: ((((((menu == "정규 영업 시간 변경" OR menu == "휴무일 설정") OR menu == "영업 일시 중지 설정") OR menu == "정기 휴무일 설정") OR menu == "브레이크타임 설정") OR menu == "요일별 영업시간 설정") OR menu == "임시 휴무일 설정")
+Skipping node $메뉴 관리로 이동.
+- Node condition: ((((menu == "메뉴 품절 설정" OR menu == "메뉴/가격 변경") OR menu == "메뉴 추가/삭제") OR menu == "메뉴 추가") OR menu == "메뉴 삭제")
+Skipping node $배달 관리로 이동.
+- Node condition: (((((menu == "배달요금 셀프관리 방법" OR menu == "배달 지역 변경") OR menu == "배달료/최소주문금액 변경") OR menu == "동단위 추가/삭제") OR menu == "배달상권지도") OR menu == "배달지역 수정")
+Skipping node $이미지 관리로 이동.
+- Node condition: ((((((menu == "사진 종류 보기" OR menu == "사진 등록/변경하기") OR menu == "대표 메뉴 설정") OR menu == "대표 사진") OR menu == "홈화면 사진") OR menu == "배경 사진") OR menu == "메뉴 사진")
+The condition $주문 관리로 이동 condition is failed.
+menu == "주문 취소 진행하기"
+Skipping node $주문 관리로 이동.
+- Node condition: menu == "주문 취소 진행하기"
+Skipping node $주문 접수 관리.
+- Node condition: ((((((((((menu == "PC 접수 프로그램" OR menu == "단말기") OR menu == "개통 요청") OR menu == "반납 요청") OR menu == "PC 자주 묻는 질문") OR menu == "단말기 자주 묻는 질문") OR menu == "단말기 오류") OR menu == "단말기 용지/영수증") OR menu == "단말기 요금") OR menu == "단말기 사용법") OR menu == "프린터/용지 관련 문의")
+Skipping node $정산 관리로 이동.
+- Node condition: ((menu == "정산일" OR menu == "정산 내역 확인") OR menu == "계좌 정보 변경")
+Skipping node $가맹 해지.
+- Node condition: ((menu == "가맹 해지" OR menu == "특정 가맹 해지") OR menu == "요기요 서비스 해지")
+The condition $리뷰 관리로 이동 condition is failed.
+menu == "리뷰 문의"
+Skipping node $리뷰 관리로 이동.
+- Node condition: menu == "리뷰 문의"
+The condition $본인인증 다이얼로그로 이동 condition is failed.
+menu == "본인인증 다시 시도"
+Skipping node $본인인증 다이얼로그로 이동.
+- Node condition: menu == "본인인증 다시 시도"
+Found 0 response intents.

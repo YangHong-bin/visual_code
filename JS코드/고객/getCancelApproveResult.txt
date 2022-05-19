@@ -1,0 +1,73 @@
+function getCancelApproveResult(phone_number, restaurant_name, cancel_number, payment_type) {
+
+    log('getCancelApproveResult function is activated')
+
+    try {
+
+        var map = {
+            '요기요 1초 결제': 'SCH10501',
+            '신용카드': 'SCH10502',
+            '핸드폰 결제': 'SCH10503',
+            '카카오페이': 'SCH10504',
+            '페이코': 'SCH10505',
+            '네이버페이': 'SCH10506',
+            '스마일페이': 'SCH10507',
+            '차이': 'SCH10508',
+            '토스': 'SCH10509'
+        }
+        var payment_type_code = map[payment_type]
+        
+        var this_price = getGlobal('this_price')
+        var this_order_date = getGlobal('this_order_date')
+        
+        var converted_date = ''
+        var splited = []
+        var time = ''
+        if(this_order_date.indexOf('T') != -1){
+          splited = this_order_date.split('T')
+          
+        }else{
+          var splited = this_order_date.split(' ')
+        }
+        
+        if(splited[1].length > 5){
+          my_time = splited[1].substr(0, 5)
+        }else{
+          my_time = splited[1]
+        }
+          
+        converted_date = splited[0] + ' ' + my_time
+        
+        log('converted_date : ' + converted_date)
+
+        var result = CancelApprove("SCH10403", phone_number, restaurant_name, cancel_number, payment_type_code, this_price, converted_date)
+        log('CancelApprove result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+
+                return 'true'
+
+            } else {
+                log('getCancelApproveResult function result : webhook result is not valid')
+                return 'false'
+            }
+
+        } else {
+            log('getCancelApproveResult function result : webhook result is empty')
+            return 'false'
+        }
+
+
+    } catch (e) {
+
+        log('getCancelApproveResult function try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+}
+

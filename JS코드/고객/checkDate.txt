@@ -1,0 +1,19 @@
+function checkDate(my_date){
+  
+  if(my_date.indexOf('T') != -1){
+    
+    var splited = my_date.split('T')[0]
+    if(splited.indexOf('X') == -1){
+      return 'true'
+    }
+    return 'false'
+    
+  }else{
+    if(my_date.indexOf('X') == -1){
+      return 'true'
+    }else{
+      return 'false'
+    }
+  }
+  
+}

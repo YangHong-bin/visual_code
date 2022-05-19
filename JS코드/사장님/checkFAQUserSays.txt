@@ -1,0 +1,11 @@
+function checkFAQUserSays() {
+  if (user_says === '배달료' || user_says === '배달비') {
+    return user_says
+  }
+  
+  if  (user_says === '세금계산서') {
+    return user_says
+  }
+  
+  return 'false'
+}

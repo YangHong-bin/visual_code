@@ -1,0 +1,17 @@
+function convertPrice(price){
+  
+  if(price.length > 3 && price.length <= 6){
+    var prev = price.substr(0, price.length - 3)
+    var aft = price.substr(price.length - 3, price.length)
+    return prev + ',' + aft  
+  }else if(price.length > 6){
+    var prev = price.substr(0, 3)
+    var mid = price.substr(3, 3)
+    var aft = price.substr(6, price.length)
+    return prev + ',' + mid + ',' + aft
+  }else if(price.length <= 3){
+    return price
+  }
+  
+  
+}

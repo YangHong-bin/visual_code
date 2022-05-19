@@ -1,0 +1,68 @@
+function getUserId () {
+  if (hermes_context.hasOwnProperty('kakao') &&
+      hermes_context.kakao.hasOwnProperty('id')) {
+    return hermes_context.kakao.id    
+  }
+  return undefined
+}
+
+function getRefundResult(phone_number, email, account_phone) {
+
+    log('getCancelApproveResult function is activated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+
+    try {
+
+        var result = RefundSuper("SCH10404", phone_number, email, account_phone)
+        debugInfos.push({
+          timestamp: now, 
+          type: '슈퍼클럽환불',
+          user_id,
+          entity_type: 'SCH10404',
+          entity_phoneNumber: phone_number,
+          entity_email: email,
+          entity_accountNumber: account_phone,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+        log('Refund result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getRefundResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getRefundResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+    } catch (e) {
+        debugInfos.push({
+          timestamp: now, 
+          type: '슈퍼클럽환불',
+          user_id,
+          result: 'getRefundResult try catch error'
+        })
+        setGlobal('debug_infos', debugInfos)
+
+        log('getRefundResult function try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+}
+

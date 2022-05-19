@@ -1,0 +1,45 @@
+function checkUserSays(num, keyword) {
+
+    log('checkUserSays is activated')
+
+    if (user_says.length >= Number(num)) {
+
+        if ((keyword != '') && (keyword == user_says)) {
+
+            log('checkUserSays result : user_says is same as keyword')
+            return 'false'
+
+        } else {
+
+            var annotations = hermes_log['candidate_annotations']
+            log('annotations : ')
+            log(JSON.stringify(annotations, null, ' '))
+
+            if (annotations.length >= 1 && annotations[0].hasOwnProperty('begin_pos') === true) {
+
+                for (var i = 0; i < annotations.length; i++) {
+
+                    var name = annotations[i]['entity_name']
+
+                    if ((name == '사업자등록번호') ||
+                        (name == '확인 요청 선택지')) {
+                        return 'false'
+                    }
+
+                }
+                return 'true'
+
+            } else {
+
+                log('checkUserSays result : annotation is empty')
+                return 'true'
+
+            }
+        }
+
+    } else {
+        log('checkUserSays result : too short user_says')
+        return 'false'
+    }
+
+}

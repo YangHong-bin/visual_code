@@ -1,0 +1,74 @@
+function getEditMenuResult() {
+  log('getEditMenuResult function is activated')
+  const user_id = getUserId()
+  const debugInfos = []
+  const now = new Date().toISOString()
+  try {
+    var menu_policy = getGlobal('menu_policy')
+    var explanation_list = ''
+    for (var i = 0; i < (menu_policy.length - 1); i++) {
+      explanation_list += menu_policy[i] + '_~|'
+    }
+    explanation_list += menu_policy[menu_policy.length - 1]
+
+    const auth_phone_number = getGlobal('phone_number')
+    const companies = []
+    // if (getGlobal('select_all') === 'true') {
+    //   companies.push(...getGlobal('company_details'))
+    // } else {
+    companies.push(getGlobal('company_info'))
+    // }
+
+    for (let i = 0; i < companies.length; ++i) {
+      let telno
+      if (auth_phone_number !== '미수집' && auth_phone_number !== 'false') {
+        telno = auth_phone_number
+      } else {
+        telno = companies[i]['phone']
+      }
+      const ceo_name = companies[i]['owner']
+      const shop_name = companies[i]['restaurant_name']
+      const bl_number = companies[i]['company_number']
+      log('company info : ' + telno + '/' + ceo_name + '/' + shop_name + '/' + bl_number)
+      var result = EditMenu('2', telno, ceo_name, shop_name, bl_number, explanation_list)
+      debugInfos.push({
+        timestamp: now, 
+        type: '메뉴명변경',
+        user_id,
+        chatbot_type: '2',
+        telno,
+        ceo_name,
+        shop_name,
+        bl_number,
+        explanation_list,
+        result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+      })
+      
+      log('EditMenu result : ')
+      log(JSON.stringify(result, null, ' '))
+      if (isEmpty(result)) {
+        log('getAddMenuResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      } else if (!result.hasOwnProperty('entityStatus')) {
+        log('getAddMenuResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      }
+    }
+    
+    setGlobal('debug_infos', debugInfos)
+    return 'true'
+  } catch (e) {
+    debugInfos.push({
+      timestamp: now, 
+      type: '메뉴변경',
+      user_id,
+      result: 'getEditMenuResult try catch error'
+    })
+    setGlobal('debug_infos', debugInfos)
+    log('getEditMenuResult try catch error : ')
+    log(e)
+    return 'false'
+  }
+}

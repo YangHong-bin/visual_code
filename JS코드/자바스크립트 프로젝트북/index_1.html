@@ -1,0 +1,29 @@
+// js로 html 조작하기
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <body>
+        <h1 id="title">여기를 변경해 주세요</h1>
+        <h2>문제: 다음 중 웹 표준 언어가 아닌 것은?</h2>
+        <ol>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>Java</li>
+            <li>JavaScript</li>
+        </ol>
+
+        <script>
+            var title = document.getElementById('title');
+            title.style.color = 'white';
+            title.style.background = 'orange';
+            title.innerHTML = 'Hello World'
+        </script>
+
+        <p> hi </p>
+    </body>
+</head>
+
+</html>

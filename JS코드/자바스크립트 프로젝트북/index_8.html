@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<h1>터치 이벤트</h1>
+<div id="box">
+    <p>나를 터치해 주세요</p>
+</div>
+
+<style>
+    #box {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 3px solid blue;
+    }
+</style>
+
+<script>
+    var box = document.getElementById('box');
+
+    var touch = {
+            start: function() {
+                box.innerHTML = '나를 건드렸군요.';
+                this.style.background = "red";
+            },
+            end: function() {
+                box.innerHTML = '손을 떼었군요!';
+                this.style.background = '';
+            },
+            move: function() {
+                box.innerHTML = '만지는 중입니다.';
+                this.style.background = 'yellow';
+
+                var touchobj = e.changedTouches[0];
+                var x = parseInt(touchobj.clientX),
+                    y = parseInt(touchobj.clientY),
+                    ex = x - 100;
+                ey = y - 200;
+                box.innerHTML = "만지는 중입니다."
+                this.style.background = 'yellow';
+                this.style.top = ex + 'px';
+                this.style.top = ey + 'px';
+            }
+        }
+        // touchstart : 화면을 건드렸을 때
+        // touchend : 화면에서 손을 떼었을 때
+        // touchmove : 화면에서 터치로 이동 중일 때
+        // clientX: 브라우저 화면을 기준으로 한 X 좌표
+        // clinetY: 브라우저 화면을 기준으로 한 Y 좌표
+        // touchmove: 화면에서 터치로 이동 중일 때
+
+    box.addEventListener('touchstart', touch.start);
+    box.addEventListener('touchend', touch.end);
+    box.addEventListener('touchmove', touch.move);
+</script>
+
+
+</html>

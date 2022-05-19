@@ -1,0 +1,102 @@
+function createAnswerFormat(){}
+
+function createTextFormat(texts) {
+    if (!Array.isArray(texts)) {
+      return
+    }
+    for (var i in texts) {
+      if (!isString(texts[i])) {
+        return
+      }
+    }
+    return { "textFormat": { "texts": texts } }
+}
+
+function createButtonsFormat(buttons) {
+  if (!Array.isArray(buttons)) {
+    return
+  }
+  
+  return {'buttonsFormat' : {"buttons": buttons}}
+}
+
+function createUrlButton(display_text, url) {
+  return {
+    "display_text" : display_text,
+    "reaction" : { 
+      "url": url
+    } 
+  }
+}
+
+function createTextButton(display_text, reaction_text){
+  
+  if(reaction_text.indexOf('http') == -1){
+    return {
+      "display_text" : display_text,
+      "reaction" : { 
+        "text": reaction_text
+      } 
+    }  
+  }else{
+    return {
+      "display_text" : display_text,
+      "reaction" : { 
+        "url": reaction_text
+      } 
+    }
+  }
+}
+
+function createCarousel(cards) {
+    if (!Array.isArray(cards)) {
+        return
+    }
+
+    for (var i in cards) {
+        if (cards[i] && 'cardFormat' in cards[i]) {
+            cards[i] = cards[i]['cardFormat']
+        }
+    }
+
+    return {
+        carouselFormat: {
+            cards: cards
+        }
+    }
+}
+
+function createCard(title, bodyText, imageUrl, buttons) {
+
+  var card = {}
+  
+  card['title'] = title
+  card['bodyText'] = bodyText
+  
+  if(imageUrl != ''){
+    card['imageUrl'] = {
+            'displayType': 1,
+            'url': imageUrl,
+        }
+  }
+  if(buttons != ''){
+    card['buttons'] = buttons
+  }
+  
+    
+  return card
+}
+
+function createCardFormat(title, bodyText, imageUrl, buttons) {
+  return {
+    cardFormat: createCard(title, bodyText, imageUrl, buttons)
+  }
+}
+
+function isString(value) {
+  return typeof value === 'string' || value instanceof String
+}
+
+function isNumber (value) {
+    return typeof value === 'number' && isFinite(value);
+}

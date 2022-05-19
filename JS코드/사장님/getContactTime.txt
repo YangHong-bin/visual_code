@@ -1,0 +1,82 @@
+function getContactTime(time) {
+
+    log('getContactTime function is activated')
+    try {
+
+        // time : 2018-01-23T11:22:33
+
+        var period = time.split(' ')[0]
+        var time_number = time.split(' ')[1]
+        var splited = time_number.split(':')
+        var hour = splited[0]
+        var minute = splited[1]
+        var second = splited[2]
+        if (period == '오후') {
+            hour = String(Number(hour) + 12)
+        }
+        var date_time = hour + ':' + minute + ':' + second
+
+        var now = new Date()
+        var year = now.getFullYear()
+        var month = addZero(String(now.getMonth() + 1))
+        var day = addZero(String(now.getDate()))
+
+        var converted = year + '-' + month + '-' + day + ' ' + date_time
+        var target = new Date(converted)
+
+        log('converted : ' + converted)
+        log('target : ' + target)
+
+        var map = [
+            { 'name': '오전10시 - 오후1시', 'range': { 'start': '10:00:00', 'end': '12:59:59' } },
+            { 'name': '오후1시 - 오후4시', 'range': { 'start': '13:00:00', 'end': '15:59:59' } },
+            { 'name': '오후4시 - 오후7시', 'range': { 'start': '16:00:00', 'end': '19:00:00' } },
+        ]
+
+        for (var i = 0; i < 3; i++) {
+
+            var start = map[i]['range']['start']
+            var end = map[i]['range']['end']
+
+            converted_start = convertDate(target, start)
+            converted_end = convertDate(target, end)
+
+            if (converted_start <= target && target <= converted_end) {
+                return map[i]['name']
+            } else {
+                continue
+            }
+
+        }
+
+        return 'false'
+
+    } catch (e) {
+
+        log('getContactTime try catch error : ' + e)
+        return 'false'
+
+    }
+
+
+}
+
+function convertDate(target, range) {
+
+    var year = target.getFullYear()
+    var month = addZero(String(target.getMonth() + 1))
+    var day = addZero(String(target.getDate()))
+
+    return new Date(year + '-' + month + '-' + day + ' ' + range)
+
+}
+
+function addZero(number) {
+
+    if (number.length == 1) {
+        return '0' + number
+    } else {
+        return number
+    }
+
+}

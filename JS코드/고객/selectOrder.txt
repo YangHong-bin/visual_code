@@ -1,0 +1,18 @@
+function selectOrder(orderNum){
+  let orderList = getGlobal('order_list');
+  let selectOrder;
+  
+  for (var i = 0; i < orderList.length; i++) {
+    if((i+1) == orderNum){
+      selectOrder = orderList[i];
+    }
+  } 
+  
+  if(!isEmpty(selectOrder)){
+    setGlobal('selectOrder', selectOrder);
+    return 'true';
+  }else{
+    return 'false';
+  }
+  
+}

@@ -1,0 +1,17 @@
+function getGlobal(parameter) {
+    try {
+        let has_global = hermes_context.hasOwnProperty(parameter)
+
+        if (has_global === true) {
+            return hermes_context[parameter]
+        } else {
+            return "미수집"
+        }
+
+    } catch (e) {
+        log('getGlobal try catch error : ')
+        log(e)
+        return "미수집"
+    }
+
+}

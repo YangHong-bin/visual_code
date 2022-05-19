@@ -1,0 +1,54 @@
+function saveCompanyNumber(this_number) {
+    log('saveCompanyNumber input ' + this_number)
+    if (!this_number) {
+      return 'false'
+    }
+    
+    var list_selected_company = getGlobal('list_selected_company')
+    var company_names = getGlobal('company_names')
+    var company_number = getGlobal('company_number')
+    
+    if (this_number == '모두 선택') {
+
+        //var converted_number = ''
+
+        //for (var i = 0; i < (list_company.length - 1); i++) {
+        //    converted_number += list_company[i]['company_number'] + ', '
+        //}
+        //converted_number += list_company[(list_company.length - 1)]['company_number']
+
+        //setGlobal('bl_number', converted_number)
+        //setGlobal('select_all', 'true')
+        //setGlobal('company_info', list_company[0])
+        //log('saveCompanyNumber Select all ' + JSON.stringify(list_company[0]))
+        return 'false'
+        
+    } else {
+        const index = Number(this_number) - 1
+        if (company_names.length <= index) {
+          log('Failed to saveCompanyNumber ' + this_number + '/' + company_names.length)
+          return 'false'
+        }
+        company_info = list_selected_company[index]
+        bl_number = list_selected_company[index]['company_number']
+        restaurant_name = list_selected_company[index]['restaurant_name']
+        restaurant_id = list_selected_company[index]['restaurant_id']
+          
+        log(JSON.stringify(company_info, null, '  '))
+        
+        if (bl_number != '미수집' && bl_number != '' && bl_number == company_number) {  
+            setGlobal('bl_number', bl_number)
+        } else {
+            setGlobal('bl_number', company_number)
+        }
+        
+        setGlobal('restaurant_name', restaurant_name)
+        setGlobal('restaurant_id', restaurant_id)
+        setGlobal('company_info', company_info)
+        log('saveCompanyNumber ' + JSON.stringify(company_info))
+    }
+    
+
+    return 'true'
+
+}

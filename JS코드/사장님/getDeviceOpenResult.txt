@@ -1,0 +1,68 @@
+function getDeviceOpenResult(device_phone, device_contact_time) {
+  log('getDeviceOpenResult function is activated')
+  const user_id = getUserId()
+  const debugInfos = []
+  const now = new Date().toISOString()
+  try {
+    const auth_phone_number = getGlobal('phone_number')
+    const companies = []
+    // if (getGlobal('select_all') === 'true') {
+    //   companies.push(...getGlobal('company_details'))
+    // } else {
+    companies.push(getGlobal('company_info'))
+    // }
+
+    for (let i = 0; i < companies.length; ++i) {
+      let telno
+      if (auth_phone_number !== '미수집' && auth_phone_number !== 'false') {
+        telno = auth_phone_number
+      } else {
+        telno = companies[i]['phone']
+      }
+      const ceo_name = companies[i]['owner']
+      const shop_name = companies[i]['restaurant_name']
+      const bl_number = companies[i]['company_number']
+      log('company info : ' + telno + '/' + ceo_name + '/' + shop_name + '/' + bl_number)
+      log('callback_telno : ' + device_phone + '/callback_time ; ' + device_contact_time)
+      var result = DeviceOpen('11', telno, ceo_name, shop_name, bl_number, device_phone, device_contact_time)
+      debugInfos.push({
+        timestamp: now, 
+        type: '단말기개통요청',
+        user_id,
+        chatbot_type: '11',
+        telno,
+        ceo_name,
+        shop_name,
+        bl_number,
+        callback_telno: device_phone,
+        callback_time: device_contact_time,
+        result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+      })
+      log('DeviceOpen Result : ')
+      log(JSON.stringify(result, null, ' '))
+      if (isEmpty(result)) {
+        log('getDeviceOpenResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      } else if (!result.hasOwnProperty('entityStatus')) {
+        log('getDeviceOpenResult function result : webhook result is not valid')
+        setGlobal('debug_infos', debugInfos)
+        return 'false'
+      }
+    }
+    
+    setGlobal('debug_infos', debugInfos)
+    return 'true'
+  } catch (e) {
+    debugInfos.push({
+      timestamp: now, 
+      type: '단말기개통요청',
+      user_id,
+      result: 'getDeviceOpenResult try catch error'
+    })
+    setGlobal('debug_infos', debugInfos)
+    log('getDeviceOpenResult try catch error : ')
+    log(e)
+    return 'false'
+  }
+}

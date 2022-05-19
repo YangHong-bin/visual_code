@@ -1,0 +1,12 @@
+function toTwoDigit (digit) {
+  const intDigit = parseInt(digit)
+  if (intDigit >= 0 && intDigit <= 9) {
+    return '0' + intDigit.toString()
+  }
+  return intDigit.toString()
+}
+
+function combineHourAndMinute (hour, minute) {
+  if (!hour || !minute) return '00:00:00'
+  return toTwoDigit(hour) + ':' + toTwoDigit(minute) + ':00'
+}

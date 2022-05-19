@@ -1,0 +1,19 @@
+function sendVerificationCode (phone_number) {
+  try {
+    const result = SendVericode(phone_number, "chatbot")
+    if (result.result === 'banned_number') {
+      return 'banned_number'
+    } else if (result.result === 'invalid_number') {
+      return 'invalid_number'
+    } else if (result.result === 'sms_error') {
+      return 'error'
+    }
+    
+    const sendCount = parseInt(result.result)
+    log('Send verification code count' + sendCount)
+    return 'true'
+  } catch (e) {
+    log("Failed to send verification" + e)
+  }
+  return 'error'
+}

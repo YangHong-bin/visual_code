@@ -1,0 +1,94 @@
+function calculatePos(items, input_page) {
+  let page = 0
+  if (input_page !== '미수집') {
+    page = Number(input_page)
+  }
+  if (items.length <= 10) {
+    return {
+      begin: 0,
+      end: items.length,
+      previous: false,
+      next: false
+    }
+  }
+
+  if (page === 0) {
+    return {
+      begin: 0,
+      end: 9,
+      previous: false,
+      next: true
+    }
+  }
+  const begin = 9 + 8 * (page - 1)
+  const leftAmount = items.length - 9 - 8 * (page - 1)
+  if (leftAmount <= 9) {
+    return {
+      begin,
+      end: begin + leftAmount,
+      previous: true,
+      next: false
+    }
+  }
+  return {
+    begin,
+    end: begin + 8,
+    previous: true,
+    next: true
+  }
+}
+
+function getPageButtons (type, items, page) {
+  const {begin, end, previous, next} = calculatePos(items, page)
+  const buttons = []
+  let message = ''
+
+  if (previous) {
+    message += '\n✅ 이전 ' + type + '를 보려면 <이전 ' + type + ' 보기> 버튼을 눌러주세요.'
+    buttons.push(createTextButton('이전 ' + type + ' 보기', '이전 ' + type + ' 보기'))
+  }
+  for (let i = begin; i < end; ++i) {
+    var items_name = items[i].invisible ? '[품절] ' + items[i].name : items[i].name
+    buttons.push(createTextButton(items_name, items[i].name))
+  }
+  if (next) {
+    message += '\n✅ 나머지 ' + type + '를 보려면 <' + type + ' 더보기> 버튼을 눌러주세요.'
+    buttons.push(createTextButton(type + ' 더보기', type + ' 더보기'))
+  }
+
+  return {message: message, buttons: buttons}
+}
+
+function changePage (type, delta) {
+  let items
+  let pageStr
+  try {
+    if (type === 'category') {
+      items = getGlobal('list_sections')
+      pageStr = getGlobal('cate_page')
+    } else {
+      items = getGlobal('list_menu')
+      pageStr = getGlobal('menu_page')
+    }
+  
+    let page
+    if (pageStr === '미수집') {
+      page = 0
+    } else {
+      page = Number(pageStr)
+    }
+  
+    const position = calculatePos(items, page)
+    const deltaNum = Number(delta)
+    if ((deltaNum > 0 && position.next) || (deltaNum < 0 && position.previous)) {
+      if (type === 'category') {
+        setGlobal('cate_page', (page + deltaNum).toString())
+      } else {
+        setGlobal('menu_page', (page + deltaNum).toString())
+      }
+    } 
+  } catch (e) {
+    log('failed to change page' + JSON.stringify(e))
+  }
+  return 'done'
+}

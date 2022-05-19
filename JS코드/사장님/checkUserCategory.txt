@@ -1,0 +1,26 @@
+function checkUserCategory() {
+
+    try {
+
+        var list_sections = getGlobal('list_sections')
+
+        for (var i = 0; i < list_sections.length; i++) {
+            if (list_sections[i]['name'] == user_says) {
+                var section_name = list_sections[i]['name']
+                var section_id = list_sections[i]['id']
+
+                setGlobal('section_name', section_name)
+                setGlobal('section_id', section_id)
+                return 'true'
+            }
+        }
+        log('checkUserCategory function result : user says invalid category name')
+        return 'false'
+
+    } catch (e) {
+        log('checkUserCategory try catch error : ')
+        log(e)
+        return 'false'
+    }
+
+}

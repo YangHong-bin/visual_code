@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ex3-6-5 | DOM </title>
+    <style>
+        #box {
+            width: 100px;
+            height: 100px;
+            border: 3px solid black;
+        }
+        
+        .box {
+            background: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="http://www.google.com" onclick="alert('구글로 이동합니다.')"> 구글</a>
+    <div id='box' onclick='changeColor()'>Hello box</div>
+    <script>
+        function changeColor() {
+            var box = document.getElementById('box');
+            box.seAttribute = ('class', 'box');
+
+            var getAttr = box.getAttribute('class');
+            alert(getAttr);
+            //속성값 설정
+            //이벤트 속성명
+            //onclick
+            //onmouseover(요소 안에 마우스가 들어갔을 때)
+            //onmouseout(요소에서 마우스가 벗어났을 때)
+            //onkeydown(키보드를 입력할 때)
+            //onkeyup(키를 눌렀다 놓을 때)
+            //onfocus,onblur(요소가 선택됐거나 해제됐을 때)
+            //onsubmit(폼 전송 이벤트가 발생했을 때)
+
+        }
+    </script>
+</body>
+
+</html>

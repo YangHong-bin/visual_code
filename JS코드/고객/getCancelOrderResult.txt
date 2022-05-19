@@ -1,0 +1,64 @@
+function getCancelOrderResult(phone_number, restaurant_name, cancel_number, cancel_cause) {
+
+    log('getCancelOrderResult function is activated')
+    const user_id = getUserId()
+    const debugInfos = []
+    const now = new Date().toISOString()
+
+    try {
+        log('Cancel order ' + phone_number)
+        log('Cancel order ' + restaurant_name)
+        log('Cancel order ' + cancel_number)
+        log('Cancel order ' + cancel_cause)
+        var result = CancelOrder("SCH10401", phone_number, restaurant_name, cancel_number, cancel_cause)
+        debugInfos.push({
+          timestamp: now, 
+          type: '주문취소',
+          user_id,
+          entity_type: 'SCH10401',
+          entity_phoneNumber: phone_number,
+          entity_restaurantName: restaurant_name,
+          entity_orderNumber: cancel_number,
+          entity_cancelTypeCode: cancel_cause,
+          result: !isEmpty(result) && result.hasOwnProperty('entityStatus')
+        })
+        log('CancelOrder result : ')
+        log(JSON.stringify(result, null, ' '))
+
+        if (!isEmpty(result)) {
+
+            if (result.hasOwnProperty('entityStatus') === true) {
+                
+                setGlobal('debug_infos', debugInfos)
+                return 'true'
+
+            } else {
+                log('getCancelOrderResult function result : webhook result is not valid')
+                setGlobal('debug_infos', debugInfos)
+                return 'false'
+            }
+
+        } else {
+            log('getCancelOrderResult function result : webhook result is empty')
+            setGlobal('debug_infos', debugInfos)
+            return 'false'
+        }
+
+
+    } catch (e) {
+        debugInfos.push({
+          timestamp: now, 
+          type: '주문취소',
+          user_id,
+          result: 'getCancelOrderResult try catch error'
+        })
+        setGlobal('debug_infos', debugInfos)
+
+        log('getCancelOrderResult function try catch error : ')
+        log(e)
+        return 'false'
+
+    }
+
+}
+

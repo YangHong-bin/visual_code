@@ -1,0 +1,23 @@
+function setComNum() {
+    log('setComNum function is activated')
+
+    var com_num_start = getGlobal('com_num_start')
+    var com_num_end = getGlobal('com_num_end')
+    var list_company_number = getGlobal('list_company_number')
+    var company_length = list_company_number.length
+
+    com_num_start = com_num_end
+    com_num_start = Number(com_num_start)
+    com_num_end = Number(com_num_end)
+
+    if ((company_length - com_num_start) < 8) {
+        com_num_end = company_length
+    } else {
+        com_num_end = com_num_start + 8
+    }
+
+    setGlobal('com_num_start', String(com_num_start))
+    setGlobal('com_num_end', String(com_num_end))
+
+    return 'true'
+}

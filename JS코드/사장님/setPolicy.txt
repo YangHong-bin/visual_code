@@ -1,0 +1,11 @@
+function setPolicy(type){
+  
+  if(type == 'delivery'){
+    hermes_context['delivery_policy'] = []
+    return 'true'  
+  }else if(type == 'menu'){
+    hermes_context['menu_policy'] = []
+    return 'true'
+  }
+  
+}

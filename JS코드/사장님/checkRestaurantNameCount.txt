@@ -1,0 +1,54 @@
+function checkRestaurantNameCount() {
+
+    log('checkRestaurantNameCount is activated')
+    try {
+        
+        var list_company = getGlobal('list_company')
+        var company_number = getGlobal('company_number')
+        var list_selected_company = []
+        var restaurantOnlinelist = []
+        var list_online_res = []
+        var company_names = []
+        
+        for (var j = 0; j < list_company.length; j++) {
+          if (list_company[j].hasOwnProperty('company_number') && list_company[j]['company_number'] == company_number) {
+              list_selected_company.push(list_company[j])
+              restaurantOnlinelist.push(RestaurantInfoDetail(String(list_company[j]['restaurant_id'])))
+          }
+        }
+        
+        for (var i = 0; i < restaurantOnlinelist.length; i++) {
+            
+
+            if (restaurantOnlinelist[i]['is_online'] == true) {
+                list_online_res.push(restaurantOnlinelist[i])
+                company_names.push(restaurantOnlinelist[i]['restaurant_name'])
+                
+                log('RestaurantOnlineList : ')
+                log(JSON.stringify(list_online_res, null, ' '));
+                
+                log('Company_names : ')
+                log(JSON.stringify(company_names, null, ' '));
+            }
+        }
+        
+        setGlobal('list_selected_company', list_online_res)
+        setGlobal('company_names', company_names)
+        
+        if (list_online_res.length > 1) {
+            return 'many'
+        } else if (list_online_res.length == 1) {
+            setGlobal('company_info', list_online_res[0])
+            return 'one'
+        } else if (list_online_res.length == 0) {
+            return 'no'
+        }
+
+    } catch (e) {
+        log('checkRestaurantNameCount try catch error : ')
+        log(e)
+
+        return 'false'
+    }
+
+}

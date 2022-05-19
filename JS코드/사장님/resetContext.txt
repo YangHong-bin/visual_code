@@ -1,0 +1,14 @@
+function resetContext(){
+
+  var phone_number = getGlobal('phone_number')
+  var debug_infos = getGlobal('debug_infos')
+  var kakao = getGlobal('kakao')
+
+  hermes_context = {}
+  
+  setGlobal('phone_number', phone_number)
+  setGlobal('debug_infos', debug_infos)
+  setGlobal('kakao', kakao)
+  
+  return 'true'
+  

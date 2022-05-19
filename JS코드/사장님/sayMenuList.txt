@@ -1,0 +1,27 @@
+function sayMenuList() {
+  const categories = getGlobal('list_menu')
+  const categoryPage = getGlobal('menu_page')
+  const task = getGlobal('task')
+
+  let message = ''
+  if (task.indexOf('추가') != -1) {
+    message += '추가할 메뉴를 아래 버튼 중에서 선택해주세요.'
+  } else if (task.indexOf('삭제') != -1) {
+    message += '삭제할 메뉴를 아래 버튼 중에서 선택해주세요.'
+  } else if (task.indexOf('변경') != -1) {
+    message += '변경할 메뉴를 아래 버튼 중에서 선택해주세요.'
+  } else if (task.indexOf('사진') != -1) {
+    message += '다음 중 어느 메뉴의 사진을 변경할까요?'
+  } else {
+    message += '메뉴를 아래 버튼 중에서 선택해주세요.'
+  }
+  const {message: buttonMessage, buttons} = getPageButtons('메뉴', categories, categoryPage)
+
+  const answers = []
+  answers.push(createTextFormat([message + buttonMessage]))
+  answers.push(createButtonsFormat(buttons))
+
+  log('sayMenuList answers: ')
+  log(JSON.stringify(answers, null, '  '))
+  return answers
+}

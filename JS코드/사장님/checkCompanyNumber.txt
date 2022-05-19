@@ -1,0 +1,43 @@
+function checkCompanyNumber(company_number) {
+
+    try {
+
+        log('before company_number : ' + company_number)
+
+        var list_company = getGlobal('list_company')
+
+        if (company_number.indexOf('-') != -1) {
+            company_number = company_number.replace('-', '').replace('-', '')
+        }
+
+        if (company_number.indexOf(' ') != -1) {
+            company_number = company_number.replace(' ', '').replace(' ', '')
+        }
+
+        log('after company_number : ' + company_number)
+
+        for (var i = 0; i < list_company.length; i++) {
+
+            this_company_number = list_company[i]['company_number']
+            this_company_number = this_company_number.replace('-', '').replace('-', '')
+            log('this_company_number : ' + this_company_number)
+
+            if (company_number == this_company_number) {
+                setGlobal('company_info', list_company[i])
+                setGlobal('bl_number', this_company_number)
+                setGlobal('restaurant_id', list_company[i]['restaurant_id'])
+                return 'true'
+            }
+        }
+
+        log('checkCompanyNumber function result : no matched company number')
+        return 'false'
+
+    } catch (e) {
+        log('checkCompanyNumber function try catch error : ')
+        log(e)
+        return 'false'
+    }
+
+}
+

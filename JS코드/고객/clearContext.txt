@@ -1,0 +1,6 @@
+function clearContext(){
+  
+  hermes_context = {}
+  return 'true'
+  
+}

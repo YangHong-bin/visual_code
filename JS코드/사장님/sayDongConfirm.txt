@@ -1,0 +1,37 @@
+function sayDongConfirm() {
+
+    var message = ''
+
+    var list_found = getGlobal('list_found')
+    setGlobal("dong_count", list_found.length)
+    message = '요청하신 지역이 '
+
+    if (list_found.length == 1) {
+
+        var city = list_found[0][0]
+        var gu = list_found[0][1]
+        var dong = list_found[0][2]
+
+        message += city + ' ' + gu + ' ' + dong + ' 인가요?'
+        return createTextFormat([message])
+
+    } else if (list_found.length > 1) {
+
+        message += '다음 중 어디인가요? 만약 2번이라면 "2번"이라고 입력해주세요.\n'
+
+        for (var i = 0; i < list_found.length; i++) {
+
+            var this_city = list_found[i][0]
+            var this_gu = list_found[i][1]
+            var this_dong = list_found[i][2]
+
+            message += '\n' + (i + 1) + '번 ' + this_city + ' ' + this_gu + ' ' + this_dong
+
+        }
+
+        return createTextFormat([message])
+
+    }
+
+
+}

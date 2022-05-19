@@ -1,0 +1,25 @@
+function checkAdrCount(adr_num) {
+
+    try {
+
+        var adr_count = getGlobal('adr_count')
+
+        log('checkAdrCount is activated')
+        log('adr_num : ' + adr_num)
+
+        if ((Number(adr_num) < 1) || (Number(adr_num) > adr_count)) {
+            log('return false')
+            return "false"
+        } else {
+            log('return true')
+            return "true"
+        }
+
+    } catch (e) {
+        log('checkAdrCount try catch error : ')
+        log(e)
+        return "false"
+    }
+
+
+}

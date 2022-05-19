@@ -1,0 +1,29 @@
+function saveMenuPolicy(foods_category, foods_menu, foods_etc) {
+
+    log('saveMenuPolicy is activated')
+
+    var menu_policy = getGlobal('menu_policy')
+    var policy = ''
+
+    var task = getGlobal('task')
+
+    if (foods_etc != "") {
+        if (task == '메뉴 추가') {
+            policy = foods_category + '_~,' + foods_menu + '_~,' + foods_etc + '원'
+        } else {
+            const request_msg = foods_etc.replace(/,/gi, '')
+            policy = foods_category + '_~,' + foods_menu + '_~,' + request_msg
+        }
+    } else {
+        policy = foods_category + '_~,' + foods_menu
+    }
+
+    log('before menu_policy : ' + JSON.stringify(menu_policy, null, ' '))
+    menu_policy.push(policy)
+    log('after menu_policy : ' + JSON.stringify(menu_policy, null, ' '))
+
+    setGlobal('menu_policy', menu_policy)
+
+    return 'true'
+
+}

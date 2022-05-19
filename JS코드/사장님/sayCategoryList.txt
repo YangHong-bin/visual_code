@@ -1,0 +1,27 @@
+function sayCategoryList() {
+  const categories = getGlobal('list_sections')
+  const categoryPage = getGlobal('cate_page')
+  const task = getGlobal('task')
+
+  let message = ''
+  if (task.indexOf('추가') != -1) {
+    message += '추가할 메뉴가 속할 카테고리를 아래 버튼 중에서 선택해주세요.\n단, 주류 메뉴 카테고리는 챗봇을 통해서 접수하실 수 없어요.'
+  } else if (task.indexOf('삭제') != -1) {
+    message += '삭제할 메뉴가 속한 카테고리를 아래 버튼 중에서 선택해주세요.'
+  } else if (task.indexOf('변경') != -1) {
+    message += '변경할 메뉴가 속한 카테고리를 아래 버튼 중에서 선택해주세요.'
+  } else if (task.indexOf('사진') != -1) {
+    message += '사진을 변경할 메뉴가 속한 카테고리를 선택해주세요.'
+  } else {
+    message += '메뉴가 속한 카테고리를 선택해주세요.'
+  }
+  const {message: buttonMessage, buttons} = getPageButtons('카테고리', categories, categoryPage)
+
+  const answers = []
+  answers.push(createTextFormat([message + buttonMessage]))
+  answers.push(createButtonsFormat(buttons))
+
+  log('sayCategoryList answers: ')
+  log(JSON.stringify(answers, null, '  '))
+  return answers
+}

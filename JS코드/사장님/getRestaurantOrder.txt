@@ -1,0 +1,60 @@
+function getRestaurantOrder(phone_no) {
+
+    log('getRestaurnatOrder function is activated')
+
+    try {
+
+        var phone_number = getGlobal('phone_no')
+
+        var result = RestaurantOrder(phone_no)
+
+        if (!isEmpty(result)) {
+
+            var order_list = []
+            for (var i = 0; i < result.length; i++) {
+
+                var this_order = {}
+                if (result[i].hasOwnProperty('submitted_at')) {
+                    var submitted_at = result[i]['submitted_at']
+                    this_order['submitted_at'] = submitted_at
+
+                }
+                if (result[i].hasOwnProperty('ordered_items')) {
+                    var ordered_items = result[i]['ordered_items']
+                    this_order['ordered_items'] = ordered_items
+
+                }
+                if (result[i].hasOwnProperty('total_price')) {
+                    var total_price = result[i]['total_price']
+                    this_order['total_price'] = total_price
+
+                }
+                if (result[i].hasOwnProperty('order_number')) {
+                    var order_number = result[i]['order_number']
+                    this_order['order_number'] = order_number
+                }
+
+                order_list.push(this_order)
+            }
+            
+            if(order_list.length != 0){
+              setGlobal('order_list', order_list)
+              return 'true'  
+            }else{
+              log('getRestaurantOrder function result : order_list is empty')
+              return 'false'
+            }
+
+        } else {
+            log('getRestaurant function result : webhook result is empty ')
+            return 'false'
+        }
+
+    } catch (e) {
+
+        log('getRestaurant try catch error : ')
+        log(e)
+        return 'false'
+    }
+
+}

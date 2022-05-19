@@ -1,0 +1,21 @@
+function resetContext(){
+  
+  var phone_number = getGlobal('phone_number')
+  var email = getGlobal('email')
+  var debug_infos = getGlobal('debug_infos')
+  var kakao = getGlobal('kakao')
+  
+  hermes_context = {}
+  
+  if(phone_number != '미수집'){
+    setGlobal('phone_number', phone_number)
+  }
+  if(email != '미수집'){
+    setGlobal('email', email)
+  }
+  setGlobal('debug_infos', debug_infos)
+  setGlobal('kakao', kakao)
+  
+  return 'true'
+  
+}
